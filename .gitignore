@@ -4,9 +4,6 @@
 *.swp
 *.swo
 
-# GitHub & CI/CD
-.github/
-
 # Cloudflare Workers & Wrangler
 .wrangler/
 worker-configuration.d.ts

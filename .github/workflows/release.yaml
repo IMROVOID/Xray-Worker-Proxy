@@ -1,0 +1,79 @@
+name: Generate and Publish Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Auto-triggers when you push a tag via Git CLI
+  workflow_dispatch:
+    inputs:
+      custom_tag:
+        description: 'Custom Version Tag (e.g., v1.2.0). Leave blank to auto-bump.'
+        required: false
+        type: string
+      bump_type:
+        description: 'Auto-bump type (if Custom Tag is blank)'
+        required: true
+        type: choice
+        default: 'patch'
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build and Upload Worker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required to fetch existing tags for auto-bumping
+
+      - name: 🏷️ Determine Version Tag
+        id: get_version
+        run: |
+          if [ -n "${{ github.event.inputs.custom_tag }}" ]; then
+            echo "TAG=${{ github.event.inputs.custom_tag }}" >> $GITHUB_ENV
+          else
+            # Get the latest tag, default to v0.0.0 if none exists
+            LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+            # Strip the 'v' prefix
+            VERSION=${LATEST_TAG#v}
+            IFS='.' read -r -a PARTS <<< "$VERSION"
+            MAJOR=${PARTS[0]}
+            MINOR=${PARTS[1]}
+            PATCH=${PARTS[2]}
+
+            if [ "${{ github.event.inputs.bump_type }}" == "major" ]; then
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+            elif [ "${{ github.event.inputs.bump_type }}" == "minor" ]; then
+              MINOR=$((MINOR + 1))
+              PATCH=0
+            else
+              PATCH=$((PATCH + 1))
+            fi
+
+            NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
+            echo "TAG=$NEW_TAG" >> $GITHUB_ENV
+          fi
+
+      - name: ⚙️ Prepare Worker Script
+        run: |
+          # Copies the raw worker from your template folder
+          cp template/worker.js ./worker.js
+
+      - name: 🚀 Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          files: worker.js
+          generate_release_notes: true
+          draft: false
+          prerelease: false

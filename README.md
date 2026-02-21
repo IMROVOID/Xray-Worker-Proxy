@@ -43,7 +43,6 @@ The project is organized into a clean and scalable structure to make navigation 
 │   └── worker.js   # The core Cloudflare Worker script
 ├── README.md       # Project documentation
 └── package.json    # NPM dependencies for the setup script
-
 ```
 
 ## ⚙️ How to Run the Project
@@ -88,6 +87,27 @@ If you prefer to configure everything manually via the Cloudflare Dashboard:
 3. Paste the `worker.js` code into the online editor.
 4. Modify the `vpnRoutes` dictionary and the `targetHost` variables with your specific domains and ports.
 5. Click **Deploy**.
+
+## 📦 Automated Releases (GitHub Actions)
+
+This repository includes a pre-configured GitHub Actions workflow to automatically package and publish new releases.
+
+You can trigger a release in two ways:
+
+**1. Using the GitHub Dashboard (Manual or Auto-bump)**
+
+* Navigate to the **Actions** tab in your repository.
+* Select the **Generate and Publish Release** workflow on the left sidebar.
+* Click the **Run workflow** dropdown.
+* You can either type a specific version into the **Custom Tag** field (e.g., `v1.2.0`), or leave it blank and select Patch/Minor/Major to have the workflow automatically calculate the next version for you.
+
+**2. Using the Git CLI (Auto-trigger)**
+Simply push a version tag directly to your repository. The workflow will intercept it and automatically attach the `worker.js` file to a new release page.
+
+```sh
+git tag v1.0.0
+git push origin v1.0.0
+```
 
 ## 🔧 How to Configure Your Clients
 
