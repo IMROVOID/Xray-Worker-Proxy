@@ -56,7 +56,7 @@ Use our interactive scripts to generate your custom code and automatically deplo
 1. **Clone the repository:**
 
 ```sh
-git clone [https://github.com/YOUR_USERNAME/CF-Stealth-Bridge.git](https://github.com/YOUR_USERNAME/CF-Stealth-Bridge.git)
+git clone https://github.com/YOUR_USERNAME/CF-Stealth-Bridge.git
 cd CF-Stealth-Bridge
 ```
 
@@ -82,8 +82,8 @@ python scripts/setup.py
 
 If you prefer to configure everything manually via the Cloudflare Dashboard:
 
-1. Download the latest `worker.js` release from GitHub.
-2. Log into your Cloudflare Dashboard and navigate to **Workers & Pages** > **Create Worker**.
+1. Download the latest [worker.js](https://github.com/IMROVOID/Xray-Worker-Proxy/releases/latest/download/worker.js) release from GitHub.
+2. Log into your [Cloudflare Dashboard](https://dash.cloudflare.com) and navigate to **Workers & Pages** > **Create Worker**.
 3. Paste the `worker.js` code into the online editor.
 4. Modify the `vpnRoutes` dictionary and the `targetHost` variables with your specific domains and ports.
 5. Click **Deploy**.
@@ -113,8 +113,8 @@ git push origin v1.0.0
 
 Once the Worker is deployed, update your VPN clients (e.g., v2rayNG, Nekobox, V2rayN) with the following standard configuration format:
 
-* **Address:** `198.41.199.172` *(or any working Cloudflare Clean IP)*
-* **Port:** `443`
+* **Address:** `198.41.199.172` *(or any working Clean IP)*
+* **Port:** `443` *(or any Cloudflare port)*
 * **SNI:** `your-worker-name.your-account.workers.dev` *(Your Worker URL)*
 * **Request Host:** `your-worker-name.your-account.workers.dev`
 * **Path:** `/sub1` *(The specific path you assigned to that config)*
@@ -135,7 +135,7 @@ This project leverages several modern tools to achieve its functionality and sea
 
 ## 📜 License
 
-This project is open-source and licensed under the [GNU General Public License v3.0 (GPL-3.0)](https://www.google.com/search?q=LICENSE).
+This project is open-source and licensed under the [GNU General Public License v3.0 (GPL-3.0)](/LICENSE).
 
 ### Summary of the License
 
